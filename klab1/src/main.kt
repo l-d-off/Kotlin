@@ -67,7 +67,7 @@ fun main(args: Array<String>)
 }
 */
 
-// Задание 7. Работа с числами.
+/* Задание 7. Работа с числами.
 // сумма цифр числа
 fun sumOfNumber(number: Int, sum: Int = 0) : Int
 = if (number == 0)
@@ -107,6 +107,41 @@ fun main(args: Array<String>)
         println("Минимальная цифра числа $number равна ${
             if (number != 0) minDigitInNumber(number) else 0}")
         println("Максимальная цифра числа $number равна ${maxDigitInNumber(number)}")
+    }
+    catch (ex: NumberFormatException)
+    {
+        println("Некорректный ввод")
+    }
+}
+*/
+
+// Задание 8. Работа с числами.
+// проверка числа на простоту
+fun simpleNumber(number: Int, del: Int = number - 1) : Boolean =
+    when
+    {
+        number == 1 -> true
+        del == 1 -> true
+        number % del == 0 -> false
+        else -> simpleNumber(number, del - 1)
+    }
+
+// сумма непростых делителей числа
+fun sumOfNoSimpleDelOfNumber(number: Int, del: Int = number, sum: Int = 0) : Int =
+    when
+    {
+        (number == 0) -> 0
+        (del == 0) -> sum
+        (number % del == 0 && !simpleNumber(del)) -> sumOfNoSimpleDelOfNumber(number, del - 1, sum + del)
+        else -> sumOfNoSimpleDelOfNumber(number, del - 1, sum)
+    }
+
+fun main(args: Array<String>)
+{
+    print("Number -> ")
+    try {
+        val number = readLine()?.toInt() ?: 0
+        println("Сумма непростых делителей числа $number равна ${sumOfNoSimpleDelOfNumber(number)}")
     }
     catch (ex: NumberFormatException)
     {
