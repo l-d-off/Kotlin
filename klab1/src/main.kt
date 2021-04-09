@@ -167,7 +167,7 @@ fun sumOfSimpleDigitsOfNumber(number: Int, sum: Int = 0) : Int =
         simpleNumber(number % 10) -> sumOfSimpleDigitsOfNumber(number / 10, sum + (number % 10))
         else -> sumOfSimpleDigitsOfNumber(number / 10, sum)
     }
-/*
+
 // Основное подзадание 3
 fun task8method3(number: Int, del: Int = number - 1, count: Int = 0) : Int =
     when
@@ -181,7 +181,7 @@ fun task8method3(number: Int, del: Int = number - 1, count: Int = 0) : Int =
         ) -> task8method3(number, del - 1, count + 1)
         else -> task8method3(number, del - 1, count)
     }
-*/
+
 fun main(args: Array<String>)
 {
     print("Number -> ")
@@ -189,7 +189,7 @@ fun main(args: Array<String>)
         val number = readLine()?.toInt() ?: 0
         println("Результат задания 1: ${sumOfNoSimpleDelOfNumber(number)}")
         println("Результат задания 2: ${countDigitsLess3(number)}")
-        /*println("Результат задания 3: ${task8method3(number)}")*/
+        println("Результат задания 3: ${task8method3(number)}")
     }
     catch (ex: NumberFormatException)
     {
