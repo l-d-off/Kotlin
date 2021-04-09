@@ -115,7 +115,7 @@ fun main(args: Array<String>)
 }
 */
 
-// Задание 8. Работа с числами.
+// Задание 8-9. Работа с числами.
 // проверка числа на простоту
 fun simpleNumber(number: Int, del: Int = number - 1) : Boolean =
     when
@@ -182,17 +182,43 @@ fun task8method3(number: Int, del: Int = number - 1, count: Int = 0) : Int =
         else -> task8method3(number, del - 1, count)
     }
 
-fun main(args: Array<String>)
+fun continueMode() : String
+    {
+        print("Continue? y/n -> ")
+        return when (readLine()) {
+            "y" -> "mainRelease"
+            "n" -> "return"
+            else -> continueMode()
+        }
+    }
+
+fun mainRelease()
 {
     print("Number -> ")
     try {
         val number = readLine()?.toInt() ?: 0
-        println("Результат задания 1: ${sumOfNoSimpleDelOfNumber(number)}")
-        println("Результат задания 2: ${countDigitsLess3(number)}")
-        println("Результат задания 3: ${task8method3(number)}")
+        print("Method 1/2/3 -> ")
+        when(readLine()?.toInt() ?: 1)
+        {
+            1 -> println("Сумма непростых делителей числа $number: ${sumOfNoSimpleDelOfNumber(number)}")
+            2 -> println("Количество цифр числа $number, меньших 3: ${countDigitsLess3(number)}")
+            3 -> println("Количество чисел по заданию 3: ${task8method3(number)}")
+            else -> println("Такого метода нет в списке")
+        }
     }
     catch (ex: NumberFormatException)
     {
         println("Некорректный ввод")
     }
+
+    when(continueMode())
+    {
+        "mainRelease" -> mainRelease()
+        "return" -> return
+    }
+}
+
+fun main(args: Array<String>)
+{
+    mainRelease()
 }
