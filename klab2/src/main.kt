@@ -19,7 +19,7 @@ fun main(args: Array<String>)
 }
 */
 
-// Задание 2. Работа с числами. Рекурсия вниз. Хвостовая рекурсия.
+/* Задание 2. Работа с числами. Рекурсия вниз. Хвостовая рекурсия.
 fun sumOfNumber(number: Int, sum: Int = 0) : Int
 = if (number == 0)
     sum
@@ -43,6 +43,73 @@ fun main(args: Array<String>)
     try {
         val number = readLine()?.toInt() ?: 0
         println("Сумма цифр числа $number равна ${sumOfNumber(number)}")
+    }
+    catch (ex: NumberFormatException)
+    {
+        println("Некорректный ввод")
+    }
+}
+ */
+
+// Задание 3. Произведение, максимум, минимум. Рекурсия вверх. Хвостовая рекурсия.
+// Произведение цифр числа. Рекурсия вверх.
+fun prodOfDigitsUp(number: Int) : Int
+= if (number == 0)
+    1
+else
+    prodOfDigitsUp(number / 10) * (number % 10)
+
+// Произведение цифр числа. Хвостовая рекурсия.
+fun prodOfDigitsTail(number: Int, prod: Int = 1) : Int
+= if (number == 0)
+    prod
+else
+    prodOfDigitsTail(number / 10, prod * (number % 10))
+
+// Минимум. Рекурсия вверх.
+fun minDigitUp(number: Int) : Int
+= if (number == 0)
+    9
+else
+{
+    val min = minDigitUp(number / 10)
+    if (number % 10 < min) number % 10 else min
+}
+
+// Минимум. Хвостовая рекурсия.
+fun minDigitTail(number: Int, min: Int = 9) : Int
+= if (number == 0)
+    min
+else
+    minDigitTail(number / 10, (if (number % 10 < min) number % 10 else min))
+
+// Максимум. Рекурсия вверх.
+fun maxDigitUp(number: Int) : Int
+= if (number == 0)
+    0
+else
+{
+    val max = maxDigitUp(number / 10)
+    if (number % 10 > max) number % 10 else max
+}
+
+// Максимум. Хвостовая рекурсия.
+fun maxDigitTail(number: Int, max: Int = 0) : Int
+= if (number == 0)
+    max
+else
+    maxDigitTail(number / 10, (if (number % 10 > max) number % 10 else max))
+
+fun main(args: Array<String>)
+{
+    print("Number -> ")
+    try {
+        val number = readLine()?.toInt() ?: 0
+        println("Произведение цифр числа $number равно ${
+            if (number != 0) prodOfDigitsUp(number) else 0}")
+        println("Минимальная цифра числа $number равна ${
+            if (number != 0) minDigitUp(number) else 0}")
+        println("Максимальная цифра числа $number равна ${maxDigitUp(number)}")
     }
     catch (ex: NumberFormatException)
     {
