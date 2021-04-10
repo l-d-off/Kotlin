@@ -117,7 +117,7 @@ fun main(args: Array<String>)
     print("Number -> ")
     try {
         val number = readLine()?.toInt() ?: 0
-        println("Сумма цифр числа $number равна ${sumOfNumber(number)}")
+        println("Сумма цифр числа $number равна ${numberTraversal(number, ::sumOfNumber)}")
         println("Произведение цифр числа $number равно ${
             if (number != 0) numberTraversal(number, ::prodOfDigitsUp) else 0}")
         println("Минимальная цифра числа $number равна ${
