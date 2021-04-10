@@ -51,7 +51,14 @@ fun main(args: Array<String>)
 }
  */
 
-// Задание 3. Произведение, максимум, минимум. Рекурсия вверх. Хвостовая рекурсия.
+// Задание 3-4. Произведение, максимум, минимум. Рекурсия вверх. Хвостовая рекурсия.
+// Сумма цифр числа. Рекурсия вниз. Хвостовая рекурсия.
+fun sumOfNumber(number: Int, sum: Int = 0) : Int
+= if (number == 0)
+    sum
+else
+    sumOfNumber(number / 10, sum + number % 10)
+
 // Произведение цифр числа. Рекурсия вверх.
 fun prodOfDigitsUp(number: Int) : Int
 = if (number == 0)
@@ -100,16 +107,22 @@ fun maxDigitTail(number: Int, max: Int = 0) : Int
 else
     maxDigitTail(number / 10, (if (number % 10 > max) number % 10 else max))
 
+// Обход числа
+fun numberTraversal(number: Int, functionTraversal: (Int) -> Int) : Int =
+    functionTraversal(number)
+
 fun main(args: Array<String>)
 {
+    // :: - ссылка на функцию
     print("Number -> ")
     try {
         val number = readLine()?.toInt() ?: 0
+        println("Сумма цифр числа $number равна ${sumOfNumber(number)}")
         println("Произведение цифр числа $number равно ${
-            if (number != 0) prodOfDigitsUp(number) else 0}")
+            if (number != 0) numberTraversal(number, ::prodOfDigitsUp) else 0}")
         println("Минимальная цифра числа $number равна ${
-            if (number != 0) minDigitUp(number) else 0}")
-        println("Максимальная цифра числа $number равна ${maxDigitUp(number)}")
+            if (number != 0) numberTraversal(number, ::minDigitUp) else 0}")
+        println("Максимальная цифра числа $number равна ${numberTraversal(number, ::maxDigitUp)}")
     }
     catch (ex: NumberFormatException)
     {
