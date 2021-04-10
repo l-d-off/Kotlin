@@ -51,78 +51,98 @@ fun main(args: Array<String>)
 }
  */
 
-// Задание 3-4. Произведение, максимум, минимум. Рекурсия вверх. Хвостовая рекурсия.
+// Задание 3-4-5. Произведение, максимум, минимум. Рекурсия вверх. Хвостовая рекурсия.
 // Сумма цифр числа. Рекурсия вниз. Хвостовая рекурсия.
-fun sumOfNumber(number: Int, sum: Int = 0) : Int
+fun sumOfNumber(number: Int, conditionFor: (Int) -> Boolean, sum: Int = 0) : Int
 = if (number == 0)
     sum
-else
-    sumOfNumber(number / 10, sum + number % 10)
+else {
+    if (conditionFor(number % 10))
+        sumOfNumber(number / 10, conditionFor, sum + number % 10)
+    else
+        sumOfNumber(number / 10, conditionFor, sum)
+}
 
 // Произведение цифр числа. Рекурсия вверх.
-fun prodOfDigitsUp(number: Int) : Int
+fun prodOfDigitsUp(number: Int, conditionFor: (Int) -> Boolean) : Int
 = if (number == 0)
     1
-else
-    prodOfDigitsUp(number / 10) * (number % 10)
+else {
+    if (conditionFor(number % 10))
+        prodOfDigitsUp(number / 10, conditionFor) * (number % 10)
+    else
+        prodOfDigitsUp(number / 10, conditionFor)
+}
 
 // Произведение цифр числа. Хвостовая рекурсия.
-fun prodOfDigitsTail(number: Int, prod: Int = 1) : Int
+fun prodOfDigitsTail(number: Int, conditionFor: (Int) -> Boolean, prod: Int = 1) : Int
 = if (number == 0)
     prod
-else
-    prodOfDigitsTail(number / 10, prod * (number % 10))
+else {
+    if (conditionFor(number % 10))
+        prodOfDigitsTail(number / 10, conditionFor, prod * (number % 10))
+    else
+        prodOfDigitsTail(number / 10, conditionFor, prod)
+}
 
 // Минимум. Рекурсия вверх.
-fun minDigitUp(number: Int) : Int
+fun minDigitUp(number: Int, conditionFor: (Int) -> Boolean) : Int
 = if (number == 0)
     9
 else
 {
-    val min = minDigitUp(number / 10)
-    if (number % 10 < min) number % 10 else min
+    val min = minDigitUp(number / 10, conditionFor)
+    if (number % 10 < min && conditionFor(number % 10)) number % 10 else min
 }
 
 // Минимум. Хвостовая рекурсия.
-fun minDigitTail(number: Int, min: Int = 9) : Int
+fun minDigitTail(number: Int, conditionFor: (Int) -> Boolean, min: Int = 9) : Int
 = if (number == 0)
     min
 else
-    minDigitTail(number / 10, (if (number % 10 < min) number % 10 else min))
+    minDigitTail(number / 10, conditionFor,
+        (if (number % 10 < min && conditionFor(number % 10)) number % 10 else min))
 
 // Максимум. Рекурсия вверх.
-fun maxDigitUp(number: Int) : Int
+fun maxDigitUp(number: Int, conditionFor: (Int) -> Boolean) : Int
 = if (number == 0)
     0
 else
 {
-    val max = maxDigitUp(number / 10)
-    if (number % 10 > max) number % 10 else max
+    val max = maxDigitUp(number / 10, conditionFor)
+    if (number % 10 > max && conditionFor(number % 10)) number % 10 else max
 }
 
 // Максимум. Хвостовая рекурсия.
-fun maxDigitTail(number: Int, max: Int = 0) : Int
+fun maxDigitTail(number: Int, conditionFor: (Int) -> Boolean, max: Int = 0) : Int
 = if (number == 0)
     max
 else
-    maxDigitTail(number / 10, (if (number % 10 > max) number % 10 else max))
+    maxDigitTail(number / 10, conditionFor,
+        (if (number % 10 > max && conditionFor(number % 10)) number % 10 else max))
 
 // Обход числа
-fun numberTraversal(number: Int, functionTraversal: (Int) -> Int) : Int =
-    functionTraversal(number)
+fun numberTraversal(number: Int, conditionFor: (Int) -> Boolean,
+                    functionTraversal: (Int, (Int) -> Boolean) -> Int) : Int =
+    functionTraversal(number, conditionFor)
 
 fun main(args: Array<String>)
 {
     // :: - ссылка на функцию
+    val conditionForDigit = {digit: Int -> digit < 5}
     print("Number -> ")
     try {
         val number = readLine()?.toInt() ?: 0
-        println("Сумма цифр числа $number равна ${numberTraversal(number, ::sumOfNumber)}")
+        println("Сумма цифр числа $number равна " +
+                "${numberTraversal(number, conditionForDigit, ::sumOfNumber)}")
         println("Произведение цифр числа $number равно ${
-            if (number != 0) numberTraversal(number, ::prodOfDigitsUp) else 0}")
+            if (number != 0)
+                numberTraversal(number, conditionForDigit, ::prodOfDigitsUp) else 0}")
         println("Минимальная цифра числа $number равна ${
-            if (number != 0) numberTraversal(number, ::minDigitUp) else 0}")
-        println("Максимальная цифра числа $number равна ${numberTraversal(number, ::maxDigitUp)}")
+            if (number != 0)
+                numberTraversal(number, conditionForDigit, ::minDigitUp) else 0}")
+        println("Максимальная цифра числа $number равна " +
+                "${numberTraversal(number, conditionForDigit, ::maxDigitUp)}")
     }
     catch (ex: NumberFormatException)
     {
