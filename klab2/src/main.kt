@@ -126,6 +126,16 @@ fun numberTraversal(number: Int, conditionFor: (Int) -> Boolean,
                     functionTraversal: (Int, (Int) -> Boolean) -> Int) : Int =
     functionTraversal(number, conditionFor)
 
+// Дополнительная функция-корректор для правильного вывода результата
+// false, если все цифры не удовлетворяют условию
+fun corrector(number: Int, conditionFor: (Int) -> Boolean) : Boolean =
+    when
+    {
+        number == 0 -> false
+        conditionFor(number % 10) -> true
+        else -> corrector(number / 10, conditionFor)
+    }
+
 fun main(args: Array<String>)
 {
     // :: - ссылка на функцию
@@ -136,10 +146,10 @@ fun main(args: Array<String>)
         println("Сумма цифр числа $number равна " +
                 "${numberTraversal(number, conditionForDigit, ::sumOfNumber)}")
         println("Произведение цифр числа $number равно ${
-            if (number != 0)
+            if (corrector(number, conditionForDigit))
                 numberTraversal(number, conditionForDigit, ::prodOfDigitsUp) else 0}")
         println("Минимальная цифра числа $number равна ${
-            if (number != 0)
+            if (corrector(number, conditionForDigit))
                 numberTraversal(number, conditionForDigit, ::minDigitUp) else 0}")
         println("Максимальная цифра числа $number равна " +
                 "${numberTraversal(number, conditionForDigit, ::maxDigitUp)}")
