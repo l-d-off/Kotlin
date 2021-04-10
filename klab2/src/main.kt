@@ -51,8 +51,8 @@ fun main(args: Array<String>)
 }
  */
 
-// Задание 3-4-5. Произведение, максимум, минимум. Рекурсия вверх. Хвостовая рекурсия.
-/* Сумма цифр числа. Рекурсия вниз. Хвостовая рекурсия.
+/* Задание 3-4-5. Произведение, максимум, минимум. Рекурсия вверх. Хвостовая рекурсия.
+// Сумма цифр числа. Рекурсия вниз. Хвостовая рекурсия.
 fun sumOfNumber(number: Int, conditionFor: (Int) -> Boolean, sum: Int = 0) : Int
 = if (number == 0)
     sum
@@ -183,7 +183,7 @@ fun main(args: Array<String>)
 Пояснение: 4 * 4 * 2 = 32
 */
 
-// Задание 7. Работа с числами. Хвостовая рекурсия и тело-выражение.
+/* Задание 7. Работа с числами. Хвостовая рекурсия и тело-выражение.
 // проверка числа на простоту
 fun simpleNumber(number: Int, del: Int = number - 1) : Boolean =
     when
@@ -289,4 +289,130 @@ fun mainRelease()
 fun main(args: Array<String>)
 {
     mainRelease()
+}
+ */
+
+// Задание 8.
+// Сумма цифр числа. Рекурсия вниз. Хвостовая рекурсия.
+fun sumOfNumber(number: Int, conditionFor: (Int) -> Boolean, sum: Int = 0) : Int
+        = if (number == 0)
+    sum
+else {
+    if (conditionFor(number % 10))
+        sumOfNumber(number / 10, conditionFor, sum + number % 10)
+    else
+        sumOfNumber(number / 10, conditionFor, sum)
+}
+
+// Произведение цифр числа. Рекурсия вверх.
+fun prodOfDigitsUp(number: Int, conditionFor: (Int) -> Boolean) : Int
+        = if (number == 0)
+    1
+else {
+    if (conditionFor(number % 10))
+        prodOfDigitsUp(number / 10, conditionFor) * (number % 10)
+    else
+        prodOfDigitsUp(number / 10, conditionFor)
+}
+
+// Произведение цифр числа. Хвостовая рекурсия.
+fun prodOfDigitsTail(number: Int, conditionFor: (Int) -> Boolean, prod: Int = 1) : Int
+        = if (number == 0)
+    prod
+else {
+    if (conditionFor(number % 10))
+        prodOfDigitsTail(number / 10, conditionFor, prod * (number % 10))
+    else
+        prodOfDigitsTail(number / 10, conditionFor, prod)
+}
+
+// Минимум. Рекурсия вверх.
+fun minDigitUp(number: Int, conditionFor: (Int) -> Boolean) : Int
+        = if (number == 0)
+    9
+else
+{
+    val min = minDigitUp(number / 10, conditionFor)
+    if (number % 10 < min && conditionFor(number % 10)) number % 10 else min
+}
+
+// Минимум. Хвостовая рекурсия.
+fun minDigitTail(number: Int, conditionFor: (Int) -> Boolean, min: Int = 9) : Int
+        = if (number == 0)
+    min
+else
+    minDigitTail(number / 10, conditionFor,
+        (if (number % 10 < min && conditionFor(number % 10)) number % 10 else min))
+
+// Максимум. Рекурсия вверх.
+fun maxDigitUp(number: Int, conditionFor: (Int) -> Boolean) : Int
+        = if (number == 0)
+    0
+else
+{
+    val max = maxDigitUp(number / 10, conditionFor)
+    if (number % 10 > max && conditionFor(number % 10)) number % 10 else max
+}
+
+// Максимум. Хвостовая рекурсия.
+fun maxDigitTail(number: Int, conditionFor: (Int) -> Boolean, max: Int = 0) : Int
+        = if (number == 0)
+    max
+else
+    maxDigitTail(number / 10, conditionFor,
+        (if (number % 10 > max && conditionFor(number % 10)) number % 10 else max))
+
+// Обход числа
+fun numberTraversal(number: Int, conditionFor: (Int) -> Boolean,
+                    functionTraversal: (Int, (Int) -> Boolean) -> Int) : Int =
+    functionTraversal(number, conditionFor)
+
+// Дополнительная функция-корректор для правильного вывода результата
+// false, если все цифры не удовлетворяют условию
+fun corrector(number: Int, conditionFor: (Int) -> Boolean) : Boolean =
+    when
+    {
+        number == 0 -> false
+        conditionFor(number % 10) -> true
+        else -> corrector(number / 10, conditionFor)
+    }
+
+// Функция op
+fun op(method: Int) : (Int, (Int) -> Boolean) -> Int =
+    when(method)
+    {
+        1 -> ::sumOfNumber
+        2 -> ::prodOfDigitsUp
+        3 -> ::minDigitUp
+        4 -> ::maxDigitUp
+        else -> ::sumOfNumber
+    }
+
+// Функция для вывода
+fun opDescription(method: Int, number: Int) : String =
+    when(method)
+    {
+        1 -> "Сумма цифр числа $number равна "
+        2 -> "Произведение цифр числа $number равно "
+        3 -> "Минимальная цифра числа $number равна "
+        4 -> "Максимальная цифра числа $number равна "
+        else -> "Сумма цифр числа $number равна "
+    }
+
+fun main(args: Array<String>)
+{
+    // :: - ссылка на функцию
+    val conditionForDigit = {digit: Int -> digit < 5}
+    print("Number -> ")
+    try {
+        val number = readLine()?.toInt() ?: 0
+        print("Method sum - 1, prod - 2, min - 3, max - 4 -> ")
+        val methodChoose = readLine()?.toInt() ?: 0
+        println(opDescription(methodChoose, number) +
+                "${numberTraversal(number, conditionForDigit, op(methodChoose))}")
+    }
+    catch (ex: NumberFormatException)
+    {
+        println("Некорректный ввод")
+    }
 }
