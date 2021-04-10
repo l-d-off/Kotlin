@@ -115,7 +115,7 @@ fun main(args: Array<String>)
 }
 */
 
-// Задание 8-9. Работа с числами.
+/* Задание 8-9. Работа с числами.
 // проверка числа на простоту
 fun simpleNumber(number: Int, del: Int = number - 1) : Boolean =
     when
@@ -222,3 +222,4 @@ fun main(args: Array<String>)
 {
     mainRelease()
 }
+*/
