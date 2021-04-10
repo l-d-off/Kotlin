@@ -292,7 +292,7 @@ fun main(args: Array<String>)
 }
  */
 
-// Задание 8.
+/* Задание 8.
 // Сумма цифр числа. Рекурсия вниз. Хвостовая рекурсия.
 fun sumOfNumber(number: Int, conditionFor: (Int) -> Boolean, sum: Int = 0) : Int
         = if (number == 0)
@@ -416,3 +416,4 @@ fun main(args: Array<String>)
         println("Некорректный ввод")
     }
 }
+ */
