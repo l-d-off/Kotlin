@@ -227,49 +227,169 @@ fun main(args: Array<String>)
 }
 */
 
-// Задание 10.22
-fun task1022(names: MutableList<String>) : Long
-    {
-        // получаем лист со значениями из суммы букв
-        val nameScores: MutableList<Int> = mutableListOf()
-        names.forEachIndexed() {
-                index: Int, s: String -> run {
-                var nameScore = 0
-                s.forEach {
-                    nameScore += it.toInt() - 64
-                }
-                nameScore *= (index + 1)
-                nameScores.add(nameScore)
+/* Задание 10.22
+// читаем файл в строку
+fun fWordsInStr(fileName: String) = File(fileName).readText()
+
+// бьём строку на имена
+fun splitStrToWords(wordsInStr: String) = wordsInStr.split(",")
+
+// удаляем кавычки из имён
+fun rmQuotesFromWords(wordsWithQuotes: List<String>) : MutableList<String>
+{
+    val words: MutableList<String> = mutableListOf()
+    wordsWithQuotes.forEach {
+        words.add(it.removeSuffix("\"").removePrefix("\""))
+    }
+    return words
+}
+
+// набор функций для получения набора слов из файла
+fun listOfWords(fileName: String) : List<String>
+{
+    // читаем файл в строку
+    val wordsInStr = fWordsInStr(fileName)
+
+    // бьём строку на имена и сортируем
+    var wordsWithQuotes = splitStrToWords(wordsInStr)
+    wordsWithQuotes = wordsWithQuotes.sorted()
+
+    // удаляем кавычки из имён
+    return rmQuotesFromWords(wordsWithQuotes)
+}
+
+// получаем лист со значениями из суммы букв
+fun fWordScores(words: List<String>) : MutableList<Int>
+{
+    val wordScores: MutableList<Int> = mutableListOf()
+    words.forEachIndexed() {
+            index: Int, s: String ->
+        run {
+            var wordScore = 0
+            s.forEach {
+                wordScore += it.toInt() - 64
             }
+            wordScore *= (index + 1)
+            wordScores.add(wordScore)
         }
+    }
+    return wordScores
+}
+
+// получаем общее значение
+fun fTotalWordScores(wordScores: MutableList<Int>) : Long
+{
+    var totalWordScores = 0L
+    wordScores.forEach {
+        totalWordScores += it
+    }
+    return totalWordScores
+}
+
+fun task1022(words: List<String>) : Long
+{
+    // получаем лист со значениями из суммы букв
+    val wordScores = fWordScores(words)
 /*
-        nameScores.forEachIndexed() {
+        wordScores.forEachIndexed() {
                 index: Int, s: Int ->
             println("${index + 1}: $s")
         }
 */
-        // получаем общее значение
-        var totalNameScores = 0L
-        nameScores.forEach {
-            totalNameScores += it
-        }
-
-        return totalNameScores
-    }
+    // получаем общее значение
+    return fTotalWordScores(wordScores)
+}
 
 fun main(args: Array<String>) {
+    val fileName = "names.txt"
+    val words = listOfWords(fileName)
+
+    println("Total score: ${task1022(words)}")
+}
+ */
+
+// Задание 10.42
+// читаем файл в строку
+fun fWordsInStr(fileName: String) = File(fileName).readText()
+
+// бьём строку на имена
+fun splitStrToWords(wordsInStr: String) = wordsInStr.split(",")
+
+// удаляем кавычки из имён
+fun rmQuotesFromWords(wordsWithQuotes: List<String>) : MutableList<String>
+{
+    val words: MutableList<String> = mutableListOf()
+    wordsWithQuotes.forEach {
+        words.add(it.removeSuffix("\"").removePrefix("\""))
+    }
+    return words
+}
+
+// набор функций для получения набора слов из файла
+fun listOfWords(fileName: String) : List<String>
+{
     // читаем файл в строку
-    val namesInStr: String = File("names.txt").readText()
+    val wordsInStr = fWordsInStr(fileName)
 
     // бьём строку на имена и сортируем
-    var namesWithQuotes = namesInStr.split(",")
-    namesWithQuotes = namesWithQuotes.sorted()
+    var wordsWithQuotes = splitStrToWords(wordsInStr)
+    wordsWithQuotes = wordsWithQuotes.sorted()
 
     // удаляем кавычки из имён
-    val names: MutableList<String> = mutableListOf()
-    namesWithQuotes.forEach {
-        names.add(it.removeSuffix("\"").removePrefix("\""))
+    return rmQuotesFromWords(wordsWithQuotes)
+}
+
+// получаем лист со значениями из суммы букв
+fun fWordScores(words: List<String>) : MutableList<Int>
+{
+    val wordScores: MutableList<Int> = mutableListOf()
+    words.forEach { itWords ->
+        var wordScore = 0
+            itWords.forEach {
+                wordScore += it.toInt() - 64
+            }
+            wordScores.add(wordScore)
+    }
+    return wordScores
+}
+
+// проверка соответствия значения слова треугольному числу
+fun isWordScoreEquivalentToNumber(score: Int, current: Int = 1) : Boolean =
+    when
+    {
+        current * (current + 1) / 2 == score -> true
+        current * (current + 1) / 2 > score -> false
+        else -> isWordScoreEquivalentToNumber(score, current + 1)
     }
 
-    println("Total score: ${task1022(names)}")
+// получаем общее значение
+fun fTotalWordScores(wordScores: MutableList<Int>) : Int
+{
+    var totalWordScores = 0
+    wordScores.forEach {
+        if (isWordScoreEquivalentToNumber(it))
+            ++totalWordScores
+    }
+    return totalWordScores
+}
+
+fun task1042(words: List<String>) : Int
+{
+    // получаем лист со значениями из суммы букв
+    val wordScores = fWordScores(words)
+/*
+        wordScores.forEachIndexed() {
+                index: Int, s: Int ->
+            println("${index + 1}: $s")
+        }
+*/
+    // получаем общее значение
+    return fTotalWordScores(wordScores)
+}
+
+fun main(args: Array<String>) {
+    val fileName = "words.txt"
+    val words = listOfWords(fileName)
+
+    println("Total score: ${task1042(words)}")
 }
