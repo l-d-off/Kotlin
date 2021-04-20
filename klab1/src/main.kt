@@ -1,3 +1,6 @@
+import jdk.nashorn.internal.objects.NativeArray.forEach
+import java.io.File
+import java.io.InputStream
 /* задание 3
 fun main(args: Array<String>)
 {
@@ -223,3 +226,50 @@ fun main(args: Array<String>)
     mainRelease()
 }
 */
+
+// Задание 10.22
+fun task1022(names: MutableList<String>) : Long
+    {
+        // получаем лист со значениями из суммы букв
+        val nameScores: MutableList<Int> = mutableListOf()
+        names.forEachIndexed() {
+                index: Int, s: String -> run {
+                var nameScore = 0
+                s.forEach {
+                    nameScore += it.toInt() - 64
+                }
+                nameScore *= (index + 1)
+                nameScores.add(nameScore)
+            }
+        }
+/*
+        nameScores.forEachIndexed() {
+                index: Int, s: Int ->
+            println("${index + 1}: $s")
+        }
+*/
+        // получаем общее значение
+        var totalNameScores = 0L
+        nameScores.forEach {
+            totalNameScores += it
+        }
+
+        return totalNameScores
+    }
+
+fun main(args: Array<String>) {
+    // читаем файл в строку
+    val namesInStr: String = File("names.txt").readText()
+
+    // бьём строку на имена и сортируем
+    var namesWithQuotes = namesInStr.split(",")
+    namesWithQuotes = namesWithQuotes.sorted()
+
+    // удаляем кавычки из имён
+    val names: MutableList<String> = mutableListOf()
+    namesWithQuotes.forEach {
+        names.add(it.removeSuffix("\"").removePrefix("\""))
+    }
+
+    println("Total score: ${task1022(names)}")
+}
