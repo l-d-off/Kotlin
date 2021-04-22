@@ -1,6 +1,8 @@
 import jdk.nashorn.internal.objects.NativeArray.forEach
 import java.io.File
 import java.io.InputStream
+import kotlin.math.pow
+
 /* задание 3
 fun main(args: Array<String>)
 {
@@ -308,7 +310,7 @@ fun main(args: Array<String>) {
 }
  */
 
-// Задание 10.42
+/* Задание 10.42
 // читаем файл в строку
 fun fWordsInStr(fileName: String) = File(fileName).readText()
 
@@ -392,4 +394,100 @@ fun main(args: Array<String>) {
     val words = listOfWords(fileName)
 
     println("Total score: ${task1042(words)}")
+}
+ */
+
+// Задание 10.62
+// ищем факториал числа
+fun factorial(number: Int) : Int =
+    when (number)
+    {
+        0 -> 1
+        1 -> 1
+        else -> factorial(number - 1) * number
+    }
+
+// ищем куб числа
+fun findNumber(number: Long = 5L) : Long
+{
+    val cube = number * number * number
+    val listFromCube = splitNumberToList(cube)
+    // уникальный list (set)
+    val setFromCube = listFromCube.toSet()
+    // величина, на которую поделим итог
+    var keptFactorials = 1
+    setFromCube.forEach {
+        keptFactorials *= factorial(countOfEqualsInList(listFromCube, it))
+    }
+    val countOfPermutation = findCountOfPermutation(listFromCube, listFromCube.size - 1) / keptFactorials
+    //println("$cube: -> $countOfPermutation")
+    return if (countOfPermutation == 5)
+        cube
+    else
+        findNumber(number + 1L)
+}
+
+// сколько раз в листе встретится элемент
+fun countOfEqualsInList(list: List<Long>, el: Long) : Int
+{
+    var countOfEquals = 0
+    list.forEach {
+        if (el == it)
+            ++countOfEquals
+    }
+    return countOfEquals
+}
+
+// бьём число на лист
+fun splitNumberToList(number: Long, list: MutableList<Long> = mutableListOf()) : List<Long> =
+    if (number == 0L)
+        list
+    else {
+        list.add(0, number % 10)
+        splitNumberToList(number / 10, list)
+    }
+
+// проверка на наличие у числа кубического корня
+fun findCubeRoot(cube: Long, root: Long = 5) : Boolean
+{
+    val curCube = root * root * root
+    return when
+    {
+        curCube == cube -> true
+        curCube > cube -> false
+        else -> findCubeRoot(cube, root + 1L)
+    }
+}
+
+// ищем количество перестановок для заданного куба числа
+fun findCountOfPermutation(list: List<Long>, powOf10: Int, cur: Long = 0) : Int
+{
+    val curCube = findCubeRoot(cur)
+    var countOfPermutation = 0
+
+    // если лист пустой, у числа есть куб и число при делении на степень числа 10 не равно 0
+    if (list.isEmpty())
+    {
+        return if (curCube) {
+            if (cur / (10.0).pow(powOf10).toLong() != 0L)
+                1
+            else
+                0
+        } else
+            0
+    }
+    else {
+        list.forEach {
+            val cube = cur * 10L + it
+            countOfPermutation += findCountOfPermutation(list.minus(it), powOf10, cube)
+        }
+    }
+
+    return countOfPermutation
+}
+
+fun main(args: Array<String>)
+{
+    println("Wait for a minute")
+    println(findNumber())
 }
