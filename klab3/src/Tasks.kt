@@ -13,6 +13,10 @@ fun main() {
 //    println("Sum of array elements: ${sum(array)}")
 //    println("Mult of array elements: ${mult(array)}")
 //
+//    // task 3
+//    val array = inputArray()
+//    print("\nInput result: ")
+//    outputArray<Int>(array)
 }
 // вывод массива
 fun<T> outputArray(array: Array<T>) {
@@ -87,6 +91,49 @@ fun inputListByFileV2(): List<Int> =
     catch(e: NullPointerException) { throw e }
     catch(e: java.io.FileNotFoundException) { throw e }
     catch(e: NumberFormatException) { throw e }
+
+// task 3: спросить пользователя, откуда читать данные,
+// в зависимости от ответа читать или с клавиатуры, или из файла,
+// для выполнения данной задачи построить функцию,
+// возвращающую функцию, возвращающую массив
+fun selectArrayInputMethod(): () -> Array<Int> {
+    println("How do you want to input array?")
+    println("1. Console")
+    println("2. Standard file\n")
+    print(">: ")
+
+    return when(readLine()) {
+        "1" -> {
+            println()
+            ::inputArrayByConsole
+        }
+        "2" -> ::inputArrayByFileV2
+        else -> {
+            println("Invalid method. Try again!\n")
+            selectArrayInputMethod()
+        }
+    }
+}
+
+// task 3: и для реализации чтения результат этой функции
+fun inputArray(): Array<Int> {
+    return try {
+        selectArrayInputMethod()()
+    }
+    catch(e: Exception) {
+        when(e) {
+            is NullPointerException, is java.io.FileNotFoundException -> {
+                println("\nError: ${e.message}! I'm sorry, select console :(\n")
+                inputArray()
+            }
+            is NumberFormatException -> {
+                println("\nError: ${e.message}! Check the file.\n")
+                inputArray()
+            }
+            else -> throw e
+        }
+    }
+}
 
 // task 1, 2: написать одну функцию arrayOp() с применением
 // хвостовой рекурсии, перебирающую элементы массива, принимающую
