@@ -88,6 +88,12 @@ fun main() {
 //    println("Sum of list elements: ${sum(list)}")
 //    println("Mult of list elements: ${mult(list)}")
 //
+//    // task 6: использовать в task 5 встроенные методы
+//    println("Min list element: ${list.minOrNull()}")
+//    println("Max list element: ${list.maxOrNull()}")
+//    println("Sum of list elements: ${list.sum()}")
+//    println("Mult of list elements: ${list.reduce { acc, i -> acc * i }}")
+//
 }
 
 // вывод массива
