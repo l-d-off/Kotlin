@@ -94,6 +94,11 @@ fun main() {
 //    println("Sum of list elements: ${list.sum()}")
 //    println("Mult of list elements: ${list.reduce { acc, i -> acc * i }}")
 //
+//    // task 7: переписать task 3 через список
+//    val list = inputList()
+//    print("\nInput result: ")
+//    outputList<Int>(list)
+//
 }
 
 // вывод массива
@@ -207,6 +212,46 @@ fun inputArray(): Array<Int> {
             is NumberFormatException -> {
                 println("\nError: ${e.message}! Check the file.\n")
                 inputArray()
+            }
+            else -> throw e
+        }
+    }
+}
+
+// task 7: переписать task 3 через список
+fun selectListInputMethod(): () -> List<Int> {
+    println("How do you want to input list?")
+    println("1. Console")
+    println("2. Standard file\n")
+    print(">: ")
+
+    return when(readLine()) {
+        "1" -> {
+            println()
+            ::inputListByConsole
+        }
+        "2" -> ::inputListByFileV2
+        else -> {
+            println("Invalid method. Try again!\n")
+            selectListInputMethod()
+        }
+    }
+}
+
+// task 7: и для реализации чтения результат этой функции
+fun inputList(): List<Int> {
+    return try {
+        selectListInputMethod()()
+    }
+    catch(e: Exception) {
+        when(e) {
+            is NullPointerException, is java.io.FileNotFoundException -> {
+                println("\nError: ${e.message}! I'm sorry, select console :(\n")
+                inputList()
+            }
+            is NumberFormatException -> {
+                println("\nError: ${e.message}! Check the file.\n")
+                inputList()
             }
             else -> throw e
         }
