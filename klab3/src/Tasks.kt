@@ -80,7 +80,16 @@ fun main() {
 //    // task 4.57 (9/9)
 //    println("Number of matching elements: ${task4_57(array)}")
 
+//    // *** СПИСКИ ***
+//
+//    // task 5: переписать task 1 через список
+//    println("Min list element: ${min(list)}")
+//    println("Max list element: ${max(list)}")
+//    println("Sum of list elements: ${sum(list)}")
+//    println("Mult of list elements: ${mult(list)}")
+//
 }
+
 // вывод массива
 fun<T> outputArray(array: Array<T>) {
     print("${array.joinToString(" ")}")
@@ -220,6 +229,21 @@ fun sum(array: Array<Int>): Int =
     arrayOp(array.iterator(), { a: Int, b: Int -> a + b})
 
 fun mult(array: Array<Int>): Int =
+    arrayOp(array.iterator(), { a: Int, b: Int -> a * b}, 1)
+
+
+// task 5: переписать тоже самое для списка
+
+fun min(array: List<Int>): Int =
+    arrayOp(array.iterator(), { a: Int, b: Int -> if (a < b) a else b}, array.first())
+
+fun max(array: List<Int>): Int =
+    arrayOp(array.iterator(), { a: Int, b: Int -> if (a > b) a else b}, array.first())
+
+fun sum(array: List<Int>): Int =
+    arrayOp(array.iterator(), { a: Int, b: Int -> a + b})
+
+fun mult(array: List<Int>): Int =
     arrayOp(array.iterator(), { a: Int, b: Int -> a * b}, 1)
 
 
