@@ -34,6 +34,14 @@ fun main() {
 //     val sortedListOfStrings = sortStringsByNumberOfWords(listOfStrings)
 //     println("\nSorted list of strings by number of words:\n")
 //     outputList<String>(sortedListOfStrings, "\n")
+
+//     task 7
+//     val listOfStrings = File("task7_example.txt").readText().split("\r\n")
+//     println("Source list of strings:\n")
+//     outputList<String>(listOfStrings, "\n")
+//     val sortedListOfStrings = task7(listOfStrings)
+//     println("\nSorted list of strings by max quantity of words following the number:\n")
+//     outputList<String>(sortedListOfStrings, "\n")
 }
 
 // вместо joinToString
@@ -277,5 +285,41 @@ fun sortStringsByNumberOfWords(listOfStrings: List<String>): List<String> {
     // outputList<String>(listOfStrings2, "\n")
 
     val result = listOfStrings.withIndex().sortedBy { it -> listOfStrings2[it.index].split(" ").size }
+    return result.map { it -> it.value }
+}
+
+// task 7: дан список строк из файла, упорядочить по количеству слов идущих после чисел
+// *строки формата: "1 aaa aaa aaa 3 33 aaa" - 3*
+// *нужно взять максимальное количество слов после числа, а не общее количество*
+// !
+fun task7(listOfStrings: List<String>): List<String> {
+    fun findMaxQuantity(it: Iterator<String>, currentQ: Int = 0, max: Int = 0): Int {
+        return if (it.hasNext()) {
+            val value = it.next()
+            if ((value as? Int) != null) {
+                if (currentQ > max)
+                    findMaxQuantity(it, 0, currentQ)
+                else
+                    findMaxQuantity(it, 0, max)
+            }
+            else findMaxQuantity(it, currentQ + 1, max)
+        }
+        else {
+            if (currentQ > max)
+                currentQ
+            else max
+        }
+    }
+
+    // заменяет n-ое количество пробелов на один
+    val regexSpaces = "\\s{2,}".toRegex()
+
+    // dropWhile и dropLastWhile для того, чтобы убрать
+    // 1 (!) пробел в начале или конце, если они есть
+    // (c регуляркой не очень красиво получается)
+    val listOfStrings2 = listOfStrings.map { it ->
+        regexSpaces.replace(it, " ").dropWhile { it == ' ' }.dropLastWhile { it == ' ' }.split(" ") }
+
+    val result = listOfStrings.withIndex().sortedBy { it -> findMaxQuantity(listOfStrings2[it.index].iterator()) }
     return result.map { it -> it.value }
 }
