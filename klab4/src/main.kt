@@ -26,6 +26,14 @@ fun main() {
 //     outputList<String>(listOfStrings, "\n")
 //     println("\nSorted list of strings:\n")
 //     outputList<String>(sortStringsByLength(listOfStrings), "\n")
+
+//     task 6
+//     val listOfStrings = File("task6_example.txt").readText().split("\n")
+//     println("Source list of strings:\n")
+//     outputList<String>(listOfStrings, "\n")
+//     val sortedListOfStrings = sortStringsByNumberOfWords(listOfStrings)
+//     println("\nSorted list of strings by number of words:\n")
+//     outputList<String>(sortedListOfStrings, "\n")
 }
 
 // вместо joinToString
@@ -251,4 +259,23 @@ fun task4_launchMenu() {
 // task 5: прочитать список строк из файла, упорядочить по длине строки
 fun sortStringsByLength(listOfStrings: List<String>): List<String> {
     return listOfStrings.sortedBy { it -> it.length }
+}
+
+// task 6: дан список строк из файла, упорядочить по количеству слов в строке
+// *за слово принимаем любой набор символов, разделённый пробелом*
+fun sortStringsByNumberOfWords(listOfStrings: List<String>): List<String> {
+    // заменяет n-ое количество пробелов на один
+    val regexSpaces = "\\s{2,}".toRegex()
+
+    // dropWhile и dropLastWhile для того, чтобы убрать
+    // 1 (!) пробел в начале или конце, если они есть
+    // (c регуляркой не очень красиво получается)
+    val listOfStrings2 = listOfStrings.map { it ->
+        regexSpaces.replace(it, " ").dropWhile { it == ' ' }.dropLastWhile { it == ' ' } }
+
+    // println("\nList without extra spaces:\n")
+    // outputList<String>(listOfStrings2, "\n")
+
+    val result = listOfStrings.withIndex().sortedBy { it -> listOfStrings2[it.index].split(" ").size }
+    return result.map { it -> it.value }
 }
