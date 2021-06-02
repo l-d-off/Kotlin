@@ -16,6 +16,9 @@ fun main() {
 //     val text = File("task3_example.txt").readText()
 //     println("Dates (check file 'task3_example.txt'):\n")
 //     outputList<String>(findDates(text),"\n")
+
+//     task 4: задачи 3, 8, 16
+//     task4_launchMenu()
 }
 
 // вместо joinToString
@@ -179,4 +182,10 @@ fun findDates(s: String): List<String> {
     // поскольку дальше ничего с этими датами делать не нужно
     // возвращаем в удобном виде List<String>, а не List<List<String>>
     return listOfDates2.map { it.joinToString(" ") }
+}
+
+// task 4.3 (1/3): найти общее количество русских символов
+fun findRussianCharacters(s: String): Int {
+    val charactersCode = s.toCharArray().map { it.toInt() }
+    return charactersCode.count { ((it >= 1040) && (it <= 1103)) || (it == 1025) || (it == 1105) }
 }
