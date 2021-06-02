@@ -54,3 +54,11 @@ fun task2_3(s: String): String {
 
     return listOfWords.joinToString(" ")
 }
+
+// task 2.8 (2/3): дана строка в которой записаны слова через пробел,
+// посчитать количество слов с четным количеством символов
+fun task2_8(s: String): Int {
+    val listOfWords = s.split(" ")
+    return if (s == "") 0
+    else listOfWords.count { it -> it.count() % 2 == 0 }
+}
