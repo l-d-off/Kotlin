@@ -189,3 +189,9 @@ fun findRussianCharacters(s: String): Int {
     val charactersCode = s.toCharArray().map { it.toInt() }
     return charactersCode.count { ((it >= 1040) && (it <= 1103)) || (it == 1025) || (it == 1105) }
 }
+
+// task 4.8 (2/3): найти все используемые строчные символы латиницы
+fun findLowercaseEnglishCharacters(s: String): Set<Char> {
+    val lowercaseCharacters = s.toCharArray().filter { (it.toInt() >= 97) && (it.toInt() <= 122) }
+    return lowercaseCharacters.toSet()
+}
